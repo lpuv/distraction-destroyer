@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
 
 # ohm
 ascii_banner() {
@@ -52,7 +52,7 @@ ${redc}v1${bluec}           ,888)  \`Y8888P'
 "
 
 # set sed/flush/hosts syntax (Linux v macOS)
-hostsfile='/etc/hosts'
+hostsfile='/home/leo/nix-config/hosts.txt'
 
 case $OSTYPE in
 "linux"*)
@@ -62,7 +62,7 @@ case $OSTYPE in
       flush_command='cmd.exe /c ipconfig /flushdns>nul' # silent DNS flush
       ;;
    *)
-      flush_command='systemd-resolve --flush-caches'
+      flush_command='cd /home/leo/nix-config && sudo nixos-rebuild switch --upgrade --flake .#cattop'
       ;;
    esac
    sed_syntax='sed -i'
@@ -102,6 +102,7 @@ unblock_targets() {
    for target in "${arr[@]}"; do
       $sed_syntax "/$target/d" $hostsfile
    done
+   cd /home/leo/nix-config && sudo nixos-rebuild switch --option substitute false --upgrade --flake .#cattop
    printf "\n🌱 All distractions resurrected 🌱\n"
 }
 
@@ -240,7 +241,7 @@ done
 # flush DNS so stored IPs of distractions get gone
 if [ "$flush" = true ]; then
    printf "\n🚽 Flushing DNS cache\n"
-   $flush_command 2>/dev/null
+   cd /home/leo/nix-config && nix flake update && sudo nixos-rebuild switch --upgrade --flake .#cattop 2>/dev/null
    quip="$(random "changesmade[@]")"
    printf '\n🐉 '"$quip"
 else

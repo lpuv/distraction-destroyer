@@ -1,2 +1,8 @@
 facebook.com
 reddit.com
+youtube.com
+libredd.it
+r.nf
+tryhackme.com
+github.com
+*.internal.craftcat.dev
